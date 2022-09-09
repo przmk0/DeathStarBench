@@ -59,7 +59,7 @@ function _M.ReadHomeTimeline()
   local tracer = bridge_tracer.new_from_global()
   local parent_span_context = tracer:binary_extract(
       ngx.var.opentracing_binary_context)
-  GenericObjectPool:setMaxTotal(1024)
+  GenericObjectPool:setMaxTotal(256)
   local span = tracer:start_span("read_home_timeline_client",
       { ["references"] = { { "child_of", parent_span_context } } })
   local carrier = {}
