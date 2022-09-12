@@ -74,12 +74,9 @@ function _M.ReadHomeTimeline()
     ngx.log(ngx.ERR, "Incomplete arguments")
     ngx.exit(ngx.HTTP_BAD_REQUEST)
   end
-
-
+ 
   local get_client_span = tracer:start_span("read_home_timeline_get_client_from_pool",
       { ["references"] = { { "child_of", parent_span_context } } })
-  local get_client_carrier = {}
-  tracer:text_map_inject(span:context(), get_client_carrier)
 
   local client = GenericObjectPool:connection(
       HomeTimelineServiceClient, "home-timeline-service" .. k8s_suffix, 9090)
