@@ -12,6 +12,8 @@ services:
   frontend:
     environment:
       - TLS
+      - JAEGER_SAMPLE_RATIO
+      - LOG_LEVEL
     build: .
     image: hotel_reserv_frontend_single_node
     entrypoint: frontend
@@ -25,6 +27,8 @@ services:
   profile:
     environment:
       - TLS
+      - JAEGER_SAMPLE_RATIO
+      - LOG_LEVEL
     build: .
     image: hotel_reserv_profile_single_node
     entrypoint: profile
@@ -45,12 +49,16 @@ services:
     restart: always
     environment:
       - TLS
+      - JAEGER_SAMPLE_RATIO
+      - LOG_LEVEL
       # - GRPC_GO_LOG_VERBOSITY_LEVEL=2
       # - GRPC_GO_LOG_SEVERITY_LEVEL=info
 
   geo:
     environment:
       - TLS
+      - JAEGER_SAMPLE_RATIO
+      - LOG_LEVEL
     build: .
     image: hotel_reserv_geo_single_node
     entrypoint: geo
@@ -63,6 +71,8 @@ services:
   rate:
     environment:
       - TLS
+      - JAEGER_SAMPLE_RATIO
+      - LOG_LEVEL
     build: .
     image: hotel_reserv_rate_single_node
     entrypoint: rate
@@ -76,6 +86,8 @@ services:
   recommendation:
     environment:
       - TLS
+      - JAEGER_SAMPLE_RATIO
+      - LOG_LEVEL
     build: .
     image: hotel_reserv_recommend_single_node
     entrypoint: recommendation
@@ -88,6 +100,8 @@ services:
   user:
     environment:
       - TLS
+      - JAEGER_SAMPLE_RATIO
+      - LOG_LEVEL
     build: .
     image: hotel_reserv_user_single_node
     entrypoint: user
@@ -100,6 +114,8 @@ services:
   reservation:
     environment:
       - TLS
+      - JAEGER_SAMPLE_RATIO
+      - LOG_LEVEL
     build: .
     image: hotel_reserv_rsv_single_node
     entrypoint: reservation

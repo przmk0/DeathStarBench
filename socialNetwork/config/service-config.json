@@ -27,7 +27,8 @@
     "addr": "url-shorten-memcached",
     "timeout_ms": 10000,
     "port": 11211,
-    "connections": 512
+    "connections": 512,
+    "binary_protocol": 1
   },
   "social-graph-service": {
     "keepalive_ms": 10000,
@@ -41,14 +42,16 @@
     "addr": "user-timeline-redis",
     "timeout_ms": 10000,
     "port": 6379,
-    "connections": 512
+    "connections": 512,
+    "use_cluster": 0
   },
   "social-graph-redis": {
     "keepalive_ms": 10000,
     "addr": "social-graph-redis",
     "timeout_ms": 10000,
     "port": 6379,
-    "connections": 512
+    "connections": 512,
+    "use_cluster": 0
   },
   "post-storage-service": {
     "keepalive_ms": 10000,
@@ -62,7 +65,8 @@
     "addr": "compose-post-redis",
     "timeout_ms": 10000,
     "port": 6379,
-    "connections": 512
+    "connections": 512,
+    "use_cluster": 0
   },
   "user-timeline-mongodb": {
     "keepalive_ms": 10000,
@@ -83,7 +87,8 @@
     "addr": "user-memcached",
     "timeout_ms": 10000,
     "port": 11211,
-    "connections": 512
+    "connections": 512,
+    "binary_protocol": 1
   },
   "ssl": {
     "serverKeyPath": "/keys/server.key",
@@ -112,7 +117,8 @@
     "addr": "home-timeline-redis",
     "timeout_ms": 10000,
     "port": 6379,
-    "connections": 512
+    "connections": 512,
+    "use_cluster": 0
   },
   "compose-post-service": {
     "keepalive_ms": 10000,
@@ -141,7 +147,8 @@
     "addr": "post-storage-memcached",
     "timeout_ms": 10000,
     "port": 11211,
-    "connections": 512
+    "connections": 512,
+    "binary_protocol": 1
   },
   "user-mention-service": {
     "keepalive_ms": 10000,

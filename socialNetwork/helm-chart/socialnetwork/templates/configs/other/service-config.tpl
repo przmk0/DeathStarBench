@@ -1,3 +1,15 @@
+{{- define "mongodb-sharded.connection" }}
+  {{ .Values.global.mongodb.sharding.svc.user }}:{{ .Values.global.mongodb.sharding.svc.password }}@{{ .Values.global.mongodb.sharding.svc.name }}
+{{- end }}
+
+{{- define "memcached-cluster.connection" }}
+  {{ .Release.Name }}-mcrouter
+{{- end }}
+
+{{- define "redis-cluster.connection" }}
+  {{ .Release.Name }}-redis-cluster
+{{- end}}
+
 {{- define "socialnetwork.templates.other.service-config.json"  }}
 {
     "secret": "secret",
@@ -9,18 +21,19 @@
       "keepalive_ms": 10000
     },
     "social-graph-mongodb": {
-      "addr": "social-graph-mongodb",
-      "port": 27017,
+      "addr": {{ ternary (include "mongodb-sharded.connection" . | trim) "social-graph-mongodb" .Values.global.mongodb.sharding.enabled | quote}},
+      "port": {{ ternary .Values.global.mongodb.sharding.svc.port 27017 .Values.global.mongodb.sharding.enabled}},
       "connections": 512,
       "timeout_ms": 10000,
       "keepalive_ms": 10000
     },
     "social-graph-redis": {
-      "addr": "social-graph-redis",
+      "addr": {{ ternary (include "redis-cluster.connection" . | trim) "social-graph-redis" .Values.global.redis.cluster.enabled | quote}},
       "port": 6379,
       "connections": 512,
       "timeout_ms": 10000,
-      "keepalive_ms": 10000
+      "keepalive_ms": 10000,
+      "use_cluster": {{ ternary 1 0 .Values.global.redis.cluster.enabled}}
     },
     "write-home-timeline-service": {
       "addr": "write-home-timeline-service",
@@ -38,11 +51,12 @@
       "keepalive_ms": 10000
     },
     "home-timeline-redis": {
-      "addr": "home-timeline-redis",
+      "addr": {{ ternary (include "redis-cluster.connection" . | trim) "home-timeline-redis" .Values.global.redis.cluster.enabled | quote}},
       "port": 6379,
       "connections": 512,
       "timeout_ms": 10000,
-      "keepalive_ms": 10000
+      "keepalive_ms": 10000,
+      "use_cluster": {{ ternary 1 0 .Values.global.redis.cluster.enabled}}
     },
     "compose-post-service": {
       "addr": "compose-post-service",
@@ -52,11 +66,12 @@
       "keepalive_ms": 10000
     },
     "compose-post-redis": {
-      "addr": "compose-post-redis",
+      "addr": {{ ternary (include "redis-cluster.connection" . | trim) "compose-post-redis" .Values.global.redis.cluster.enabled | quote}},
       "port": 6379,
       "connections": 512,
       "timeout_ms": 10000,
-      "keepalive_ms": 10000
+      "keepalive_ms": 10000,
+      "use_cluster": {{ ternary 1 0 .Values.global.redis.cluster.enabled}}
     },
     "user-timeline-service": {
       "addr": "user-timeline-service",
@@ -66,18 +81,19 @@
       "keepalive_ms": 10000
     },
     "user-timeline-mongodb": {
-      "addr": "user-timeline-mongodb",
-      "port": 27017,
+      "addr": {{ ternary (include "mongodb-sharded.connection" . | trim) "user-timeline-mongodb" .Values.global.mongodb.sharding.enabled | quote}},
+      "port": {{ ternary .Values.global.mongodb.sharding.svc.port 27017 .Values.global.mongodb.sharding.enabled}},
       "connections": 512,
       "timeout_ms": 10000,
       "keepalive_ms": 10000
     },
     "user-timeline-redis": {
-      "addr": "user-timeline-redis",
+      "addr": {{ ternary (include "redis-cluster.connection" . | trim) "user-timeline-redis" .Values.global.redis.cluster.enabled | quote}},
       "port": 6379,
       "connections": 512,
       "timeout_ms": 10000,
-      "keepalive_ms": 10000
+      "keepalive_ms": 10000,
+      "use_cluster": {{ ternary 1 0 .Values.global.redis.cluster.enabled}}
     },
     "post-storage-service": {
       "addr": "post-storage-service",
@@ -87,18 +103,19 @@
       "keepalive_ms": 10000
     },
     "post-storage-mongodb": {
-      "addr": "post-storage-mongodb",
-      "port": 27017,
+      "addr": {{ ternary (include "mongodb-sharded.connection" . | trim) "post-storage-mongodb" .Values.global.mongodb.sharding.enabled | quote}},
+      "port": {{ ternary .Values.global.mongodb.sharding.svc.port 27017 .Values.global.mongodb.sharding.enabled}},
       "connections": 512,
       "timeout_ms": 10000,
       "keepalive_ms": 10000
     },
     "post-storage-memcached": {
-      "addr": "post-storage-memcached",
-      "port": 11211,
+      "addr": {{ ternary (include "memcached-cluster.connection" . | trim) "post-storage-memcached" .Values.global.memcached.cluster.enabled | quote}},
+      "port": {{ ternary .Values.global.memcached.cluster.port 11211 .Values.global.memcached.cluster.enabled}},
       "connections": 512,
       "timeout_ms": 10000,
-      "keepalive_ms": 10000
+      "keepalive_ms": 10000,
+      "binary_protocol": {{ ternary 0 1 .Values.global.memcached.cluster.enabled}}
     },
     "unique-id-service": {
       "addr": "unique-id-service",
@@ -116,18 +133,19 @@
       "keepalive_ms": 10000
     },
     "media-mongodb": {
-      "addr": "media-mongodb",
-      "port": 27017,
+      "addr": {{ ternary (include "mongodb-sharded.connection" . | trim) "media-mongodb" .Values.global.mongodb.sharding.enabled | quote}},
+      "port": {{ ternary .Values.global.mongodb.sharding.svc.port 27017 .Values.global.mongodb.sharding.enabled}},
       "connections": 512,
       "timeout_ms": 10000,
       "keepalive_ms": 10000
     },
     "media-memcached": {
-      "addr": "media-memcached",
-      "port": 11211,
+      "addr": {{ ternary (include "memcached-cluster.connection" . | trim) "media-memcached" .Values.global.memcached.cluster.enabled | quote}},
+      "port": {{ ternary .Values.global.memcached.cluster.port 11211 .Values.global.memcached.cluster.enabled}},
       "connections": 512,
       "timeout_ms": 10000,
-      "keepalive_ms": 10000
+      "keepalive_ms": 10000,
+      "binary_protocol": {{ ternary 0 1 .Values.global.memcached.cluster.enabled}}
     },
     "media-frontend": {
       "addr": "media-frontend",
@@ -158,15 +176,16 @@
       "keepalive_ms": 10000
     },
     "url-shorten-memcached": {
-      "addr": "url-shorten-memcached",
-      "port": 11211,
+      "addr": {{ ternary (include "memcached-cluster.connection" . | trim) "url-shorten-memcached" .Values.global.memcached.cluster.enabled | quote}},
+      "port": {{ ternary .Values.global.memcached.cluster.port 11211 .Values.global.memcached.cluster.enabled}},
       "connections": 512,
       "timeout_ms": 10000,
-      "keepalive_ms": 10000
+      "keepalive_ms": 10000,
+      "binary_protocol": {{ ternary 0 1 .Values.global.memcached.cluster.enabled}}
     },
     "url-shorten-mongodb": {
-      "addr": "url-shorten-mongodb",
-      "port": 27017,
+      "addr": {{ ternary (include "mongodb-sharded.connection" . | trim) "url-shorten-mongodb" .Values.global.mongodb.sharding.enabled | quote}},
+      "port": {{ ternary .Values.global.mongodb.sharding.svc.port 27017 .Values.global.mongodb.sharding.enabled}},
       "connections": 512,
       "timeout_ms": 10000,
       "keepalive_ms": 10000
@@ -180,15 +199,16 @@
       "netif": "eth0"
     },
     "user-memcached": {
-      "addr": "user-memcached",
-      "port": 11211,
+      "addr": {{ ternary (include "memcached-cluster.connection" . | trim) "user-memcached" .Values.global.memcached.cluster.enabled | quote}},
+      "port": {{ ternary .Values.global.memcached.cluster.port 11211 .Values.global.memcached.cluster.enabled}},
       "connections": 512,
       "timeout_ms": 10000,
-      "keepalive_ms": 10000
+      "keepalive_ms": 10000,
+      "binary_protocol": {{ ternary 0 1 .Values.global.memcached.cluster.enabled}}
     },
     "user-mongodb": {
-      "addr": "user-mongodb",
-      "port": 27017,
+      "addr": {{ ternary (include "mongodb-sharded.connection" . | trim) "user-mongodb" .Values.global.mongodb.sharding.enabled | quote}},
+      "port": {{ ternary .Values.global.mongodb.sharding.svc.port 27017 .Values.global.mongodb.sharding.enabled}},
       "connections": 512,
       "timeout_ms": 10000,
       "keepalive_ms": 10000
