@@ -75,13 +75,13 @@ function _M.ReadHomeTimeline()
     ngx.exit(ngx.HTTP_BAD_REQUEST)
   end
  
-  local get_client_span = tracer:start_span("read_home_timeline_get_client_from_pool",
-      { ["references"] = { { "child_of", parent_span_context } } })
+  --local get_client_span = tracer:start_span("read_home_timeline_get_client_from_pool",
+  --    { ["references"] = { { "child_of", parent_span_context } } })
 
   local client = GenericObjectPool:connection(
       HomeTimelineServiceClient, "home-timeline-service" .. k8s_suffix, 9090)
 
-  get_client_span.finish()
+  --get_client_span.finish()
   
   local status, ret = pcall(client.ReadHomeTimeline, client, req_id,
       tonumber(args.user_id), tonumber(args.start), tonumber(args.stop), carrier)
