@@ -64,7 +64,7 @@ function _M.ReadHomeTimeline()
       { ["references"] = { { "child_of", parent_span_context } } })
   local carrier = {}
   tracer:text_map_inject(span:context(), carrier)
-
+  GenericObjectPool:setMaxTotal(200)
   ngx.req.read_body()
   local args = ngx.req.get_uri_args()
 
